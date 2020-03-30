@@ -13,7 +13,6 @@ router.route('/:id').get((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
-
 router.route('/delete/:id').get((req, res) => {
     Contact.findByIdAndDelete(req.params.id)
     .then(data => res.json(data))
@@ -26,6 +25,6 @@ router.route('/add').post((req, res) => {
     newContact.save()
       .then(() => res.json('Contact added!'))
       .catch(err => res.status(400).json('Error: ' + err));
-  });
+});
 
 module.exports = router;
