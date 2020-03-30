@@ -17,43 +17,23 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 const uri = process.env.ATLAS_URI;
-
 mongoose.connect(
     uri,
-    { useNewUrlParser: true, useUnifiedTopology: true },
+    { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true },
     () => console.log('DB connected')
 );
-
-const contactSchema = new mongoose.Schema({
-    firstName: String,
-    lastName: String,
-    company: String,
-    email: String,
-    message: {
-        type: String,
-        default: 'N/A'
-    },
-    date: {
-        type: Date,
-        default: Date.now
+const connection = mongoose.connection;
+connection.once(
+    'open',
+    () => { 
+        console.log('DB connection established');
     }
-});
-
-const Contact = mongoose.model("Contact", contactSchema);
+);
+const addRouter = require('./routes/contacts');
+app.use('/contacts', addRouter);
 
 app.get('/', (req, res) => {
     res.send('Hello World')
-});
-
-app.post('/add', (req, res) => {
-    const myData = new Contact(req.body);
-    myData.save()
-        .then(data => {
-            res.send(`Thanks, ${req.body.firstName}`);
-        })
-        .catch(error => {
-            res.status(400).send('Unable to save')
-        })
 });
 
 app.listen(port, 
