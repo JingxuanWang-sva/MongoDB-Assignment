@@ -1,4 +1,6 @@
+//npm install axios
 import React, { Component } from 'react';
+import axios from 'axios';
 
 class CreateContact extends Component {
     constructor(props) {
@@ -8,20 +10,31 @@ class CreateContact extends Component {
         this.onChangeLastName = this.onChangeLastName.bind(this);
         this.onChangeCompany = this.onChangeCompany.bind(this);
         this.onChangeEmail = this.onChangeEmail.bind(this);
+        this.onChangeMessage = this.onChangeMessage.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
 
         this.state = {
             firstName: '',
             lastName: '',
             company: '',
-            email: ''
+            email: '',
+            message:''
         }
     }
 
+    // componentDidMount() {
+    //     axios.get('http://localhost:3000/contacts')
+    //         .then(res => {
+    //             if(res.data.length > 0) {
+    //                 this.setState({
+    //                     firstName: 'Jingxuan'
+    //                 });
+    //             }
+    //         })
+    // }
+
     componentDidMount() {
-        this.setState({
-            firstName: 'Lauren'
-        });
+       
     }
 
     onChangeFirstName(e) {
@@ -48,6 +61,12 @@ class CreateContact extends Component {
         });
     }
 
+    onChangeMessage(e) {
+        this.setState({
+            message: e.target.value
+        });
+    }
+
     onSubmit(e) {
         e.preventDefault();
 
@@ -55,8 +74,12 @@ class CreateContact extends Component {
             firstName: this.state.firstName,
             lastName: this.state.lastName,
             email: this.state.email,
-            company: this.state.company
+            company: this.state.company,
+            message: this.state.message
         }
+
+        axios.post('http://localhost:3000/contacts/add', contact)
+            .then(res => console.log(res.data));
 
         console.log(contact);
 
@@ -80,6 +103,10 @@ class CreateContact extends Component {
                 <div className="form-field">
                     <label>Email</label>
                     <input type="email" name="email" placeholder="" value={this.state.email} onChange={this.onChangeEmail} required />
+                </div>
+                <div className="form-field">
+                    <label>Message</label>
+                    <input type="message" name="message" placeholder="" value={this.state.email} onChange={this.onChangeMessage} required />
                 </div>
                 <input className="submit" type="submit" value="Submit"></input>
             </form>
