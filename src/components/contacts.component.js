@@ -20,8 +20,9 @@ constructor(props){
 }
 
 componentDidMount() {
-    axios.post('http://localhost:3000/contacts/add', contact)
-    .then(res => console.log(res.data));
+    axios.post('http://localhost:3000/contacts/')
+    .then(response => {
+        this.setState({ contacts: response.data })
     .catch((error) => {
         console.log(error);
     })
